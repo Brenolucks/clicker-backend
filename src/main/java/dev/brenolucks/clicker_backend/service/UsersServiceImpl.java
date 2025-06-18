@@ -53,4 +53,18 @@ public class UsersServiceImpl implements UsersService {
         var newUser = new Users(userRequestDTO.username(), userRequestDTO.email(), passwordEncrypted);
         usersRepository.save(newUser);
     }
+
+    @Override
+    public void generateRandomNumber(String username) {
+        var result = usersRepository.findRandomNumberByUsername(username);
+        var user = result.orElseThrow(() -> new RuntimeException("User doesn't exist!"));
+
+        if(user.getRandomNumber() == 0) {
+            int randomNumber = (int) (Math.random() * 101);
+            user.setRandomNumber(randomNumber);
+            usersRepository.save(user);
+        } else {
+            throw new RuntimeException("Number already exists for this user.");
+        }
+    }
 }

@@ -17,16 +17,23 @@ import java.util.List;
 @Table(name = "tb_users")
 public class Users implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;
     private String password;
+    private int randomNumber;
+    private int avaliableClick;
 
     public Users(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public Users(String username, int randomNumber) {
+        this.username = username;
+        this.randomNumber = randomNumber;
     }
 
     @Override

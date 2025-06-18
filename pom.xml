@@ -50,6 +50,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+			<version>42.7.7</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -87,6 +88,12 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.9.1</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

@@ -18,6 +18,7 @@ public class UsersController {
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserRequestDTO userRequestDTO) {
+        userServiceImpl.generateRandomNumber(userRequestDTO.username());
         return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.loginUser(userRequestDTO));
     }
 
