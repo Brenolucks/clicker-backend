@@ -1,7 +1,8 @@
 package dev.brenolucks.clicker_backend.service;
 
+import dev.brenolucks.clicker_backend.domain.dto.UserLoginResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.UserRegisterResponseDTO;
 import dev.brenolucks.clicker_backend.domain.dto.UserRequestDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserResponseDTO;
 import dev.brenolucks.clicker_backend.domain.model.Users;
 import dev.brenolucks.clicker_backend.repositories.UsersRepository;
 import dev.brenolucks.clicker_backend.utils.JwtUtils;
@@ -28,43 +29,47 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserResponseDTO loginUser(UserRequestDTO userRequestDTO) {
-        //check in DB
+    public UserLoginResponseDTO loginUser(UserRequestDTO userRequestDTO) {
         var existUser = usersRepository.findByUsername(userRequestDTO.username());
-        if(existUser.isEmpty()) throw new RuntimeException("User not exist");
+        if(existUser.isEmpty()) throw new RuntimeException(String.format("User with this username: %s not exist", userRequestDTO.username()));
 
         var user = new UsernamePasswordAuthenticationToken(userRequestDTO.username(), userRequestDTO.password());
-        System.out.println(user);
+
         var userAuthenticated = authenticationManager.authenticate(user);
         var token = jwtUtils.generateToken((Users) userAuthenticated.getPrincipal());
 
-        System.out.println("TOKEN: " + token);
-
-        return new UserResponseDTO(user.getName(), userRequestDTO.email(), token);
+        return new UserLoginResponseDTO(user.getName(), existUser.get().getEmail(), existUser.get().getRandomNumber(),
+                existUser.get().getAvaliableClick(), token);
     }
 
     @Override
-    public void registerUser(UserRequestDTO userRequestDTO) {
-        var existUser = usersRepository.findByUsername(userRequestDTO.email());
-        if(existUser.isPresent()) throw new RuntimeException("User already exists!");
+    public UserRegisterResponseDTO registerUser(UserRequestDTO userRequestDTO) {
+        var existUserEmail = usersRepository.findFirstByEmail(userRequestDTO.email());
+        var existUserUsername = usersRepository.findFirstByUsername(userRequestDTO.username());
+
+        if(existUserEmail.isPresent()) throw new RuntimeException(String.format("User with this email: %s, already exists!", userRequestDTO.email()));
+        if(existUserUsername.isPresent()) throw new RuntimeException(String.format("User with this username: %s, already exists!", userRequestDTO.username()));
 
         var passwordEncrypted = passwordEncoder.encode(userRequestDTO.password());
 
         var newUser = new Users(userRequestDTO.username(), userRequestDTO.email(), passwordEncrypted);
         usersRepository.save(newUser);
+
+        return new UserRegisterResponseDTO(newUser.getUsername(), newUser.getEmail());
     }
 
     @Override
-    public void generateRandomNumber(String username) {
-        var result = usersRepository.findRandomNumberByUsername(username);
-        var user = result.orElseThrow(() -> new RuntimeException("User doesn't exist!"));
+    public void generateRandomNumberAndClicks(String username) {
+        var userFound = usersRepository.findUserByUsername(username);
+        var user = userFound.orElseThrow(() -> new RuntimeException("User doesn't exist!"));
+
+        var randomNumber = (int) (Math.random() * 101);
+        var availableClicksRandomNumber = (int) (Math.random() * randomNumber);
 
         if(user.getRandomNumber() == 0) {
-            int randomNumber = (int) (Math.random() * 101);
             user.setRandomNumber(randomNumber);
+            user.setAvaliableClick(availableClicksRandomNumber);
             usersRepository.save(user);
-        } else {
-            throw new RuntimeException("Number already exists for this user.");
         }
     }
 }

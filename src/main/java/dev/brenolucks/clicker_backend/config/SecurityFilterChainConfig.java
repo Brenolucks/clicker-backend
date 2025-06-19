@@ -1,7 +1,6 @@
 package dev.brenolucks.clicker_backend.config;
 
 import dev.brenolucks.clicker_backend.jwt.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

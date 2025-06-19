@@ -1,7 +1,8 @@
 package dev.brenolucks.clicker_backend.controller;
 
+import dev.brenolucks.clicker_backend.domain.dto.UserLoginResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.UserRegisterResponseDTO;
 import dev.brenolucks.clicker_backend.domain.dto.UserRequestDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserResponseDTO;
 import dev.brenolucks.clicker_backend.service.UsersServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +18,13 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserRequestDTO userRequestDTO) {
-        userServiceImpl.generateRandomNumber(userRequestDTO.username());
+    public ResponseEntity<UserLoginResponseDTO> userLogin(@RequestBody UserRequestDTO userRequestDTO) {
+        userServiceImpl.generateRandomNumberAndClicks(userRequestDTO.username());
         return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.loginUser(userRequestDTO));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> userRegister(@RequestBody UserRequestDTO userRequestDTO) {
-        userServiceImpl.registerUser(userRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered with success!");
-    }
-
-    @GetMapping("/clicker")
-    public ResponseEntity<String> clicou() {
-        System.out.println("ENTROU NO MÉTODO CLICOU");
-        return ResponseEntity.status(HttpStatus.OK).body("CLICLADO");
+    public ResponseEntity<UserRegisterResponseDTO> userRegister(@RequestBody UserRequestDTO userRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userServiceImpl.registerUser(userRequestDTO));
     }
 }
