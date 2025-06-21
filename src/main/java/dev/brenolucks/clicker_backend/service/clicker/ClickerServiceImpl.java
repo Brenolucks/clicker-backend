@@ -1,7 +1,7 @@
 package dev.brenolucks.clicker_backend.service.clicker;
 
-import dev.brenolucks.clicker_backend.domain.dto.user.UserRequestDTO;
-import dev.brenolucks.clicker_backend.domain.model.Users;
+import dev.brenolucks.clicker_backend.exceptions.clicker.ClickOverException;
+import dev.brenolucks.clicker_backend.exceptions.user.UserNotExistException;
 import dev.brenolucks.clicker_backend.repositories.UsersRepository;
 import dev.brenolucks.clicker_backend.utils.ClickerUtils;
 import org.springframework.stereotype.Service;
@@ -17,24 +17,26 @@ public class ClickerServiceImpl implements ClickerService {
     }
 
     @Override
-    public int checkNumberIsEqualDatabase(String username) {
+    public void coreClicker(String username) {
+        var user = usersRepository.findByUsername(username);
+
         var newRandomNumberClick = clickerUtils.generateRandomNUmber();
-        var numberStored = usersRepository.findRandomNumberByUsername(username);
 
-        if(newRandomNumberClick == numberStored.get().getRandomNumber()) {
+        if(user.isPresent()) throw new UserNotExistException("User with this name doesn't exist!");
+
+        if(newRandomNumberClick == user.get().getRandomNumber()) {
             //send email with photo
-            System.out.println(String.format("Equal Number: %s, %s", newRandomNumberClick, numberStored.get().getRandomNumber()));
+            System.out.println(String.format("Equal Number: %s, %s", newRandomNumberClick, user.get().getRandomNumber()));
+            throw new RuntimeException("Congrats you won the game! Your prize is sending in your email.");
         } else {
-            var newAvailableClick = numberStored.get().getAvaliableClick() - 1;
-            if(newAvailableClick < 0) throw new RuntimeException("Your clicks its over, buy more!");
+            var newAvailableClick = user.get().getAvaliableClick() - 1;
+            if(newAvailableClick < 0) throw new ClickOverException("Your clicks it's over, buy more!");
 
-            var user = numberStored.get();
-            user.setAvaliableClick(newAvailableClick);
-            usersRepository.save(user);
+            var userUpdated = user.get();
+            userUpdated.setAvaliableClick(newAvailableClick);
+            usersRepository.save(userUpdated);
 
-            System.out.println(String.format("Not equal number: %s, %s", newRandomNumberClick, numberStored.get().getRandomNumber()));
+            //logic for buy more clicks when the actual clicks avaliable its over
         }
-
-        return 0;
     }
 }

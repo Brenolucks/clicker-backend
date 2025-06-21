@@ -1,6 +1,9 @@
 package dev.brenolucks.clicker_backend.exceptions;
 
 import dev.brenolucks.clicker_backend.domain.dto.exceptions.ErrorResponseDTO;
+import dev.brenolucks.clicker_backend.exceptions.clicker.ClickOverException;
+import dev.brenolucks.clicker_backend.exceptions.user.UserExistException;
+import dev.brenolucks.clicker_backend.exceptions.user.UserNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,5 +33,16 @@ public class GlobalHandlerException {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(ClickOverException.class)
+    public ResponseEntity<ErrorResponseDTO> handleClickItsOver(ClickOverException ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                "avaliableClick",
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }
