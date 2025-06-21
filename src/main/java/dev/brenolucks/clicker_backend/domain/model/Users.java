@@ -31,9 +31,9 @@ public class Users implements UserDetails {
         this.password = password;
     }
 
-    public Users(String username, int randomNumber) {
+    public Users(String username, int avaliableClick) {
         this.username = username;
-        this.randomNumber = randomNumber;
+        this.avaliableClick = avaliableClick;
     }
 
     @Override

@@ -1,12 +1,13 @@
-package dev.brenolucks.clicker_backend.service;
+package dev.brenolucks.clicker_backend.service.user;
 
-import dev.brenolucks.clicker_backend.domain.dto.UserLoginResponseDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserRegisterResponseDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserRequestDTO;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserLoginResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserRegisterResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserRequestDTO;
 import dev.brenolucks.clicker_backend.domain.model.Users;
 import dev.brenolucks.clicker_backend.exceptions.UserExistException;
 import dev.brenolucks.clicker_backend.exceptions.UserNotExistException;
 import dev.brenolucks.clicker_backend.repositories.UsersRepository;
+import dev.brenolucks.clicker_backend.utils.ClickerUtils;
 import dev.brenolucks.clicker_backend.utils.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,15 +20,17 @@ public class UsersServiceImpl implements UsersService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final ClickerUtils clickerUtils;
 
     public UsersServiceImpl(UsersRepository usersRepository,
                            PasswordEncoder passwordEncoder,
                            AuthenticationManager authenticationManager,
-                           JwtUtils jwtUtils) {
+                           JwtUtils jwtUtils, ClickerUtils clickerUtils) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.clickerUtils = clickerUtils;
     }
 
     @Override
@@ -64,13 +67,12 @@ public class UsersServiceImpl implements UsersService {
     public void generateRandomNumberAndClicks(String username) {
         var userFound = usersRepository.findByUsername(username);
         var user = userFound.orElseThrow(() -> new UserNotExistException(String.format("User with this username: %s, doesn't exist!", username)));
-
-        var randomNumber = (int) (Math.random() * 101);
-        var availableClicksRandomNumber = (int) (Math.random() * randomNumber);
+        var randomNumber = clickerUtils.generateRandomNUmber();
+        var availableClicks = clickerUtils.generateAvailableClicks(randomNumber);
 
         if(user.getRandomNumber() == 0) {
             user.setRandomNumber(randomNumber);
-            user.setAvaliableClick(availableClicksRandomNumber);
+            user.setAvaliableClick(availableClicks);
             usersRepository.save(user);
         }
     }

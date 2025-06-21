@@ -1,9 +1,9 @@
 package dev.brenolucks.clicker_backend.controller;
 
-import dev.brenolucks.clicker_backend.domain.dto.UserLoginResponseDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserRegisterResponseDTO;
-import dev.brenolucks.clicker_backend.domain.dto.UserRequestDTO;
-import dev.brenolucks.clicker_backend.service.UsersServiceImpl;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserLoginResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserRegisterResponseDTO;
+import dev.brenolucks.clicker_backend.domain.dto.user.UserRequestDTO;
+import dev.brenolucks.clicker_backend.service.user.UsersServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

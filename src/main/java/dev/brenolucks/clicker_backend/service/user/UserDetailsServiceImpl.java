@@ -1,4 +1,4 @@
-package dev.brenolucks.clicker_backend.service;
+package dev.brenolucks.clicker_backend.service.user;
 
 import dev.brenolucks.clicker_backend.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
