@@ -24,6 +24,7 @@ public class Users implements UserDetails {
     private String password;
     private int randomNumber;
     private int avaliableClick;
+    private int attempts;
 
     public Users(String username, String email, String password) {
         this.username = username;

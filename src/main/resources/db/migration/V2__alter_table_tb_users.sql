@@ -1,0 +1,2 @@
+ALTER TABLE tb_users
+ADD COLUMN attempts INT DEFAULT 0;

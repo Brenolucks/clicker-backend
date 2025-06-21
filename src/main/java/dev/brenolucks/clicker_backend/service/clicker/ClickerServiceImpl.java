@@ -18,23 +18,24 @@ public class ClickerServiceImpl implements ClickerService {
 
     @Override
     public void coreClicker(String username) {
-        var user = usersRepository.findByUsername(username);
+        var user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotExistException("User with this name doesn't exist!"));
 
         var newRandomNumberClick = clickerUtils.generateRandomNUmber();
 
-        if(user.isPresent()) throw new UserNotExistException("User with this name doesn't exist!");
+        var attempts = user.getAttempts() + 1;
 
-        if(newRandomNumberClick == user.get().getRandomNumber()) {
+        if(newRandomNumberClick == user.getRandomNumber()) {
             //send email with photo
-            System.out.println(String.format("Equal Number: %s, %s", newRandomNumberClick, user.get().getRandomNumber()));
+            System.out.println(String.format("Equal Number: %s, %s", newRandomNumberClick, user.getRandomNumber()));
             throw new RuntimeException("Congrats you won the game! Your prize is sending in your email.");
         } else {
-            var newAvailableClick = user.get().getAvaliableClick() - 1;
+            var newAvailableClick = user.getAvaliableClick() - 1;
             if(newAvailableClick < 0) throw new ClickOverException("Your clicks it's over, buy more!");
 
-            var userUpdated = user.get();
-            userUpdated.setAvaliableClick(newAvailableClick);
-            usersRepository.save(userUpdated);
+            user.setAvaliableClick(newAvailableClick);
+            user.setAttempts(attempts);
+            usersRepository.save(user);
 
             //logic for buy more clicks when the actual clicks avaliable its over
         }
