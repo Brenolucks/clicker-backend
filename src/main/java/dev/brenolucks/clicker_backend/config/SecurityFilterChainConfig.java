@@ -32,7 +32,9 @@ public class SecurityFilterChainConfig {
                                 authorizationManagerRequestMatcherRegistry
                                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/api/clicker").authenticated().anyRequest().authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/api/clicker").authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/api/pic").permitAll()
+                                        .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer
