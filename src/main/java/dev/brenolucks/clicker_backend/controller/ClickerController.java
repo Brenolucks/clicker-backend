@@ -2,7 +2,6 @@ package dev.brenolucks.clicker_backend.controller;
 
 import dev.brenolucks.clicker_backend.domain.dto.clicker.ClickerRequestDTO;
 import dev.brenolucks.clicker_backend.domain.dto.clicker.ClickerResponseDTO;
-import dev.brenolucks.clicker_backend.domain.dto.user.UserRequestDTO;
 import dev.brenolucks.clicker_backend.service.clicker.ClickerService;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;

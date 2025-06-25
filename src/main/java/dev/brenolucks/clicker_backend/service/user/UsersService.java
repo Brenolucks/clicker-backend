@@ -1,5 +1,6 @@
 package dev.brenolucks.clicker_backend.service.user;
 
+import dev.brenolucks.clicker_backend.domain.dto.user.LeadboardResponse;
 import dev.brenolucks.clicker_backend.domain.dto.user.UserLoginResponseDTO;
 import dev.brenolucks.clicker_backend.domain.dto.user.UserRegisterResponseDTO;
 import dev.brenolucks.clicker_backend.domain.dto.user.UserRequestDTO;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsersService implements IUsersService {
@@ -75,5 +78,12 @@ public class UsersService implements IUsersService {
             user.setAvaliableClick(availableClicks);
             usersRepository.save(user);
         }
+    }
+
+    @Override
+    public List<LeadboardResponse> leadboard() {
+        var users = usersRepository.findTop10ByWinnerTrueOrderByAttemptsDesc().orElseThrow(() -> new RuntimeException("Error to get a list of users."));
+        return users.stream().map(u -> new LeadboardResponse(u.getUsername(), u.getRandomNumber(), u.getAttempts(), u.isWinner()))
+                .toList();
     }
 }

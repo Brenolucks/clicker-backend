@@ -32,8 +32,10 @@ public class SecurityFilterChainConfig {
                                 authorizationManagerRequestMatcherRegistry
                                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/api/clicker").authenticated()
                                         .requestMatchers(HttpMethod.GET, "/api/pic").permitAll()
+                                        .requestMatchers("/v3/api-docs/**", "swagger-ui/**", "swagger-ui.html").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/api/clicker").authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/api/leadboard").authenticated()
                                         .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

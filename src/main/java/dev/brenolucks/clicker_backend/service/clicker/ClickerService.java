@@ -43,6 +43,7 @@ public class ClickerService implements IClickerService {
             mailUtils.sendSimpleMessage(user.getEmail(), "Prize", "Congratulation, you won the game!!", image);
             user.setAvaliableClick(newAvailableClick);
             user.setAttempts(attempts);
+            user.setWinner(true);
             usersRepository.save(user);
 
             return new ClickerResponseDTO("Congrats you won the game! Your prize is sending in your email.");
@@ -54,7 +55,6 @@ public class ClickerService implements IClickerService {
             usersRepository.save(user);
 
             return new ClickerResponseDTO("Oh no, you were not lucky this time, try again.");
-            //logic for buy more clicks when the actual clicks avaliable its over
         }
     }
 }
