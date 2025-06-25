@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 @Configuration
-@ConfigurationProperties(prefix = "spring.external")
+@ConfigurationProperties(prefix = "spring.external-api")
 public class RestProperties {
     private String host;
 }

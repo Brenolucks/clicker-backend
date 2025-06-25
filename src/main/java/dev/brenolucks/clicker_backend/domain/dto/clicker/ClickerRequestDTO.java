@@ -1,4 +1,4 @@
 package dev.brenolucks.clicker_backend.domain.dto.clicker;
 
-public record ClickerRequestDTO() {
+public record ClickerRequestDTO(String username) {
 }

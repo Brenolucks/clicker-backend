@@ -20,8 +20,6 @@ public class JwtUtils {
     }
 
     public String generateToken(Users users) {
-        System.out.println("USERNAME no momento da geração do token: " + users.getUsername());
-
         return Jwts.builder()
                 .subject(users.getUsername())
                 .issuedAt(new Date())
