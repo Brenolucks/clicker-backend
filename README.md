@@ -1,77 +1,77 @@
-# Documentação da API - Swagger / OpenAPI
+# Clicker API
 
-Este diretório contém a especificação da API REST do projeto, gerada automaticamente com o `springdoc-openapi` no padrão **OpenAPI 3.0**.
-
----
-
-## Arquivo de Documentação
-
-- **Arquivo**: `openapi.yaml`
-- **Formato**: YAML (padrão OpenAPI 3.0)
-
-Você pode abrir esse arquivo em ferramentas compatíveis com Swagger/OpenAPI, como Swagger Editor.
+It's a simple game when it's possible to create an account and access clicker endpoint where you receive a random number and available clicks.
+Everything you need is test your lucky!
 
 ---
+## Technologies
 
-## 🧪 Como visualizar a documentação
-
-### 1. Swagger UI (localmente)
-
-Se o projeto estiver rodando localmente, acesse: http://localhost:8080/swagger-ui/index.html
-
-> A porta pode variar de acordo com a configuração do seu projeto.
-
----
-
-### 2. Swagger Editor (online)
-
-Visualize a documentação diretamente no Swagger Editor:
-
-🔗 [https://editor.swagger.io](https://editor.swagger.io)
-
-**Passos:**
-1. Acesse o link acima.
-2. Clique em **File > Import File**.
-3. Selecione o arquivo `openapi.yaml` localizado na pasta `docs/`.
-
----
-
-## Como gerar novamente o arquivo `openapi.yaml`
-
-1. Suba a aplicação localmente (`localhost:8080`).
-2. No navegador, acesse: http://localhost:8080/v3/api-docs.yaml
-3. Clique com o botão direito > **Salvar como** → `openapi.yaml`.
-4. Substitua o arquivo na pasta `/docs`.
-
-> Alternativamente, você pode acessar `http://localhost:8080/v3/api-docs` para baixar em formato JSON (`openapi.json`).
-
----
-
-## Autenticação com JWT (Bearer Token)
-
-Alguns endpoints exigem autenticação.
-
-### Como usar o botão "Authorize" no Swagger:
-
-1. Clique no botão **"Authorize"** no topo direito da interface Swagger UI.
-2. Insira o token JWT no seguinte formato: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6...
-3. Clique em **Authorize**, depois **Close**.
-4. Agora os endpoints protegidos poderão ser testados com o token.
-
----
-
-## Tecnologias relacionadas
-
+- Java
 - Spring Boot
-- Spring Web / Spring Security
-- `springdoc-openapi-starter-webmvc-ui`
-- Swagger UI
-- OpenAPI 3.0
+- Spring Security + JWT
+- Spring Data JPA
+- Docker
+- PostgreSQL
+- Insomnia
+- Swagger / OpenAPI (springdoc-openapi)
+---
+## See documentation
+
+http://localhost:8080/swagger-ui/index.html
+
+> After authenticating, click **Authorize** and enter your JWT token in `Bearer <token>` format to test all protected endpoints.
+
+Also available in:
+
+- [openapi.yaml](./openapi.yaml)
+- [Swagger Editor](https://editor.swagger.io) (open the `openapi.yaml`)
 
 ---
 
-## Licença
+## Run the project
 
-Este projeto segue a licença padrão definida no repositório principal.
+```bash
+# Clone repository
+
+git clone git@github.com:your-user/clicker-backend.git
+cd clicker-backend
+
+# Configure your application.properties or application.yml with your credentials
+# Example: src/main/resources/application.yml
+
+# Run the project
+./mvnw spring-boot:run
+
+The API will be started in:
+
+http://localhost:8080
+```
+---
+## Principals Endpoints
+
+
+## User
+
+| Method | Endpoint        | Description              | Params                                                            | Authenticated |
+|--------|-----------------|--------------------------|-------------------------------------------------------------------|---------------|
+| GET    | `/api/register` | Create a new user        | `{ "username": "test", "email": "test@email", "password": "1234"` | ❌             |
+| POST   | `/api/login`    | Log in with user created | `{ "username": "", "password": "" }`                              | ✅             |
 
 ---
+
+## Clicker
+
+| Method | Endpoint       | Description                                                          | Params                   | Authenticated |
+|--------|----------------|----------------------------------------------------------------------|--------------------------|---------------|
+| POST   | `/api/clicker` | Check if your random number is equal to new generated when you click | `{ "username": "test" }` | ✅             |
+
+---
+## Author
+
+- [@brenolucks](https://www.github.com/brenolucks)
+
+---
+
+## Feedback
+
+If you have any comments, please send them to this email at brenolucks@gmail.com
